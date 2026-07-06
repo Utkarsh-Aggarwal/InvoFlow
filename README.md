@@ -1,10 +1,9 @@
-# InvoFlow
-# Invoice Data Entry Automation (Agentic AI Workflow)
+# InvoFlow — Agentic Invoice Data Entry Automation
 
-An automated pipeline that eliminates manual invoice data entry — upload an invoice in any layout, and structured data flows straight into an Excel sheet.
+An automated pipeline that eliminates manual invoice data entry — drop an invoice into Google Drive, and structured data flows straight into Google Sheets.
 
-![Demo](./demo.gif)
-<!-- Replace with your actual demo file, e.g. demo.mp4 or demo.gif -->
+## Demo
+
 
 ## The Problem
 
@@ -12,28 +11,30 @@ Manual invoice entry is slow, repetitive, and error-prone. Most automation attem
 
 ## The Solution
 
-This workflow uses **AI-driven extraction instead of static templates**, so it generalizes across different invoice formats without hardcoded field mapping.
+InvoFlow uses **AI-driven extraction instead of static templates**, so it generalizes across different invoice formats without hardcoded field mapping.
 
 **Pipeline:**
 
 ```
-Invoice Upload → LlamaIndex Extraction → Field Validation → Excel Write-back
+Google Drive Upload → LlamaIndex + Groq Extraction → Field Validation → Google Sheets Write-back
 ```
 
-1. **Intake** — Invoice (PDF/image) is uploaded via a form/folder trigger in n8n.
-2. **Extraction** — LlamaIndex parses the unstructured document and extracts structured fields (vendor, line items, amounts, dates) regardless of layout.
+1. **Intake** — Invoice (PDF/image) is uploaded to a watched Google Drive folder, which triggers the n8n workflow.
+2. **Extraction** — LlamaIndex parses the unstructured document and uses a Groq-hosted LLM to extract structured fields (vendor, line items, amounts, dates) regardless of layout.
 3. **Validation** — Extracted fields are checked/normalized before being written downstream.
-4. **Write-back** — Structured data is automatically entered into an Excel sheet, ready for use — no manual retyping.
+4. **Write-back** — Structured data is automatically entered into a Google Sheet, ready for use — no manual retyping.
 
 ## Tech Stack
 
 - **n8n** — workflow orchestration (trigger, control flow, integrations)
-- **LlamaIndex** — AI-based document parsing and structured data extraction
-- **Excel** — output destination for structured invoice data
+- **Google Drive** — invoice intake / trigger source
+- **LlamaIndex** — document parsing and extraction pipeline
+- **Groq** — LLM inference backend powering the extraction step
+- **Google Sheets** — output destination for structured invoice data
 
 ## Why This Isn't "Just OCR"
 
-Traditional invoice automation maps fixed pixel/text regions to fixed spreadsheet cells — it breaks the instant a vendor's invoice layout changes. This pipeline instead asks an AI extraction layer to *understand* the document and return structured fields, so it holds up across varying invoice structures, vendors, and layouts.
+Traditional invoice automation maps fixed pixel/text regions to fixed spreadsheet cells — it breaks the instant a vendor's invoice layout changes. InvoFlow instead asks an LLM-driven extraction layer to *understand* the document and return structured fields, so it holds up across varying invoice structures, vendors, and layouts.
 
 ## What's in This Repo
 
@@ -44,9 +45,10 @@ Traditional invoice automation maps fixed pixel/text regions to fixed spreadshee
 ## Running It Yourself
 
 1. Import `workflow.json` into your n8n instance.
-2. Set up a LlamaIndex/LlamaParse API key in the relevant node's credentials.
-3. Connect your Excel destination (Google Sheets/Excel node credentials).
-4. Trigger the workflow by uploading an invoice through the configured intake node.
+2. Connect a Google Drive account and set the watched folder as the trigger.
+3. Add your Groq API key in the LLM node's credentials.
+4. Connect your Google Sheets destination and target sheet.
+5. Drop an invoice into the watched Drive folder to trigger the workflow.
 
 ## Status
 
