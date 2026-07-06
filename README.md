@@ -2,9 +2,6 @@
 
 An automated pipeline that eliminates manual invoice data entry — drop an invoice into Google Drive, and structured data flows straight into Google Sheets.
 
-## Demo
-
-
 ## The Problem
 
 Manual invoice entry is slow, repetitive, and error-prone. Most automation attempts fall apart because they rely on **fixed OCR zones or rigid templates** — the moment a vendor changes their invoice layout, the automation breaks.
